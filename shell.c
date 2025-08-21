@@ -21,6 +21,7 @@ int main(void)
     int status;
     char *argv[2];
     extern char **environ;
+    char *end = NULL;
 
     while (1)
     {
@@ -49,7 +50,7 @@ int main(void)
             continue;
         }
 
-        char *end = line + strlen(line) - 1;
+        end = line + strlen(line) - 1;
         while (end >= line && isspace((unsigned char)*end))
         {
             *end = '\0';
