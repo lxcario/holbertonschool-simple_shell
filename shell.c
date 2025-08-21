@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define MAX_ARGS 10
+
 /**
  * main - Simple shell entry point
  * @void: No parameters
@@ -14,14 +16,14 @@
 int main(void)
 {
     char *line = NULL;
-    char *trimmed_line = NULL;
     size_t len = 0;
     ssize_t read;
     pid_t pid;
     int status;
-    char *argv[2];
+    char *argv[MAX_ARGS];
     extern char **environ;
-    char *end = NULL;
+    char *token = NULL;
+    int i;
 
     while (1)
     {
@@ -40,25 +42,24 @@ int main(void)
         if (line[read - 1] == '\n')
             line[read - 1] = '\0';
 
-        trimmed_line = line;
+        token = strtok(line, " ");
 
-        while (*trimmed_line == ' ' || *trimmed_line == '\t' || *trimmed_line == '\n')
-        {
-            trimmed_line++;
-        }
-
-        if (strlen(trimmed_line) == 0)
-        {
+        if (token == NULL)
             continue;
-        }
-
-        end = trimmed_line + strlen(trimmed_line) - 1;
-        while (end >= trimmed_line && (*end == ' ' || *end == '\t' || *end == '\n'))
+        
+        i = 0;
+        argv[i] = token;
+        i++;
+        while (i < MAX_ARGS - 1)
         {
-            *end = '\0';
-            end--;
+            token = strtok(NULL, " ");
+            if (token == NULL)
+                break;
+            argv[i] = token;
+            i++;
         }
-
+        argv[i] = NULL;
+        
         pid = fork();
         
         if (pid == -1)
@@ -69,12 +70,9 @@ int main(void)
 
         if (pid == 0)
         {
-            argv[0] = trimmed_line;
-            argv[1] = NULL;
-            
             if (execve(argv[0], argv, environ) == -1)
             {
-                perror(trimmed_line);
+                perror(argv[0]);
                 _exit(1);
             }
         }
