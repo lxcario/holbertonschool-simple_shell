@@ -16,11 +16,24 @@
  */
 char *find_executable(char *command)
 {
-    char *path_env = getenv("PATH");
+    char *path_env = NULL;
     char *path_copy;
     char *dir;
     char *full_path;
     struct stat st;
+    int i = 0;
+    
+    extern char **environ;
+
+    while (environ[i] != NULL)
+    {
+        if (strncmp(environ[i], "PATH=", 5) == 0)
+        {
+            path_env = environ[i] + 5;
+            break;
+        }
+        i++;
+    }
 
     if (path_env == NULL)
         return (NULL);
