@@ -137,6 +137,7 @@ int main(int argc, char **argv)
         if (executable_path == NULL)
         {
             fprintf(stderr, "%s: 1: %s: not found\n", argv[0], cmd_argv[0]);
+            free(line);
             return (127);
         }
 
