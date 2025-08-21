@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 	size_t len = 0;
 	ssize_t read;
 	pid_t pid;
-	int status;
+	int status = 0;
 	char *cmd_argv[MAX_ARGS];
 	extern char **environ;
 	char *token = NULL;
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 		if (strcmp(token, "exit") == 0)
 		{
 			free(line);
-			exit(EXIT_SUCCESS);
+			exit(status);
 		}
 		
 		i = 0;
@@ -137,6 +137,7 @@ int main(int argc, char **argv)
 		if (executable_path == NULL)
 		{
 			fprintf(stderr, "%s: 1: %s: not found\n", argv[0], cmd_argv[0]);
+			status = 127;
 			continue;
 		}
 
