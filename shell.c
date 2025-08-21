@@ -8,7 +8,7 @@
 
 #define MAX_ARGS 10
 
-/*
+/**
  * find_executable - Finds the full path of an executable in the PATH.
  * @command: The command name to find.
  *
@@ -35,8 +35,10 @@ char *find_executable(char *command)
         i++;
     }
 
-    if (path_env == NULL)
+    if (path_env == NULL || path_env[0] == '\0') /* Check if PATH is NULL or empty */
+    {
         return (NULL);
+    }
 
     path_copy = strdup(path_env);
     if (path_copy == NULL)
@@ -169,3 +171,4 @@ int main(void)
     free(line);
     return (0);
 }
+
