@@ -114,6 +114,12 @@ int main(int argc, char **argv)
         {
             continue;
         }
+
+        if (strcmp(token, "exit") == 0)
+        {
+            free(line);
+            exit(EXIT_SUCCESS);
+        }
         
         i = 0;
         cmd_argv[i] = token;
