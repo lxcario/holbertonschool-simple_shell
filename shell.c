@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <ctype.h>
 
 /**
  * main - Simple shell entry point
@@ -38,8 +39,22 @@ int main(void)
         if (line[read - 1] == '\n')
             line[read - 1] = '\0';
 
+        while (isspace((unsigned char)*line))
+        {
+            line++;
+        }
+
         if (strlen(line) == 0)
+        {
             continue;
+        }
+
+        char *end = line + strlen(line) - 1;
+        while (end >= line && isspace((unsigned char)*end))
+        {
+            *end = '\0';
+            end--;
+        }
 
         pid = fork();
         
