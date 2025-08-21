@@ -14,6 +14,7 @@
 int main(void)
 {
     char *line = NULL;
+    char *trimmed_line = NULL;
     size_t len = 0;
     ssize_t read;
     pid_t pid;
@@ -39,18 +40,20 @@ int main(void)
         if (line[read - 1] == '\n')
             line[read - 1] = '\0';
 
-        while (*line == ' ' || *line == '\t' || *line == '\n')
+        trimmed_line = line;
+
+        while (*trimmed_line == ' ' || *trimmed_line == '\t' || *trimmed_line == '\n')
         {
-            line++;
+            trimmed_line++;
         }
 
-        if (strlen(line) == 0)
+        if (strlen(trimmed_line) == 0)
         {
             continue;
         }
 
-        end = line + strlen(line) - 1;
-        while (end >= line && (*end == ' ' || *end == '\t' || *end == '\n'))
+        end = trimmed_line + strlen(trimmed_line) - 1;
+        while (end >= trimmed_line && (*end == ' ' || *end == '\t' || *end == '\n'))
         {
             *end = '\0';
             end--;
@@ -66,12 +69,12 @@ int main(void)
 
         if (pid == 0)
         {
-            argv[0] = line;
+            argv[0] = trimmed_line;
             argv[1] = NULL;
             
             if (execve(argv[0], argv, environ) == -1)
             {
-                perror(line);
+                perror(trimmed_line);
                 _exit(1);
             }
         }
