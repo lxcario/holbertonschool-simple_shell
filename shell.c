@@ -59,7 +59,6 @@ int main(void)
         }
         argv[i] = NULL;
         
-        // Fork a child process
         pid = fork();
         
         if (pid == -1)
