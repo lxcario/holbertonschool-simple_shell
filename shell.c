@@ -4,7 +4,6 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <ctype.h>
 
 /**
  * main - Simple shell entry point
@@ -40,7 +39,7 @@ int main(void)
         if (line[read - 1] == '\n')
             line[read - 1] = '\0';
 
-        while (isspace((unsigned char)*line))
+        while (*line == ' ' || *line == '\t' || *line == '\n')
         {
             line++;
         }
@@ -51,7 +50,7 @@ int main(void)
         }
 
         end = line + strlen(line) - 1;
-        while (end >= line && isspace((unsigned char)*end))
+        while (end >= line && (*end == ' ' || *end == '\t' || *end == '\n'))
         {
             *end = '\0';
             end--;
