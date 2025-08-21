@@ -119,6 +119,16 @@ int main(int argc, char **argv)
 			free(line);
 			exit(last_status);
 		}
+
+		if (strcmp(token, "env") == 0)
+		{
+			for (i = 0; environ[i] != NULL; i++)
+			{
+				printf("%s\n", environ[i]);
+			}
+			last_status = 0;
+			continue;
+		}
 		
 		i = 0;
 		cmd_argv[i] = token;
