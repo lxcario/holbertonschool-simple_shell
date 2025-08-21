@@ -1,78 +1,47 @@
-.TH SHELL 1 "18 August 2025 9:11 PM" GNU "Shell man page"
+.TH SHELL 1 "2025-08-18" GNU "Shell man page"
 .SH NAME
 .B hsh
-- Command line interpreter (shell)
+
+Command line interpreter (shell)
 .SH SYNOPSIS
-The shell is executed by typing ./hsh
-.br
-Then, it will wait for an input such as : command [arguments] [other]
+.B hsh
 .SH DESCRIPTION
-This shell is a project dedicated to our studies.
-.br
-.B What hsh can do :
-.br
-- Executes any command with its arguments
-.br
-- Executes built-in commands
-.br
-- Handle pipes
-.br
-- Handle the command seperator ;
-.br
-- Handle && and || logical operators
-.br
-- handle variable replacement
-.br
-- handle the $? variable
-.br
-- handle the $$ variable
+.B hsh
+is a simple command line interpreter that executes commands entered by the user. It supports interactive and non-interactive modes and includes a few built-in commands.
 .SH BUILT-IN FUNCTIONS
-Those are the available built-in functions :
+The following built-in functions are supported:
 .br
- - exit : exit the shell
+
+exit : Exits the shell.
 .br
- - cd : Change Directory
-.br
- - help : Display the help page
-.br
- - history : Display history of commands used
-.br
- - alias : Put an alias for a command
-.br
- - env : Display the environment variables
-.SH OPTIONS
-There are no options for the moment.
+
+env : Prints the current environment variables.
 .SH EXIT STATUS
-The exit value depends on how a function has terminated. Every error is identified by a certain value. On success it will always return 0.
-.SH RETURN VALUE
-Return 0 on success, otherwise it will return the exit value.
+The exit status of the shell is the exit status of the last executed command. If a command is not found, the exit status is 127.
 .SH ENVIRONMENT
-- PATH
 .br
-- $?
-.br
-- $$
+
+PATH: The search path for executable commands.
 .SH BUGS
-There is no known bugs at the moment.
+There are no known bugs at the moment.
 .SH EXAMPLE
-.B Two ways to execute our shell :
+.B Interactive Mode:
 .br
-.B The intercative mode :
+$ ./hsh
 .br
- $ ./hsh
+$ /bin/ls
 .br
- #cisfun$ /bin/ls
+hsh main.c shell.c
 .br
- hsh main.c shell.c
+$ exit
 .br
- #cisfun$ exit
+$
 .br
- $
+.B Non-interactive Mode:
 .br
-.B The non-interactive mode :
+$ echo "/bin/ls" | ./hsh
 .br
- $ echo "/bin/ls" | ./hsh
-.br
- hsh main.c shell.c
+hsh main.c shell.c
 .SH AUTHORS
 Ali Qulamaliyev
+Ravan Babakhanov <resquedzn05@gmail.com>
