@@ -82,12 +82,13 @@ int main(int argc, char **argv)
 	size_t len = 0;
 	ssize_t read;
 	pid_t pid;
-	int status = 0;
+	int status;
 	char *cmd_argv[MAX_ARGS];
 	extern char **environ;
 	char *token = NULL;
 	char *executable_path = NULL;
 	int i;
+	int last_status = 0;
 
 	(void)argc;
 
@@ -116,7 +117,7 @@ int main(int argc, char **argv)
 		if (strcmp(token, "exit") == 0)
 		{
 			free(line);
-			exit(status);
+			exit(last_status);
 		}
 		
 		i = 0;
@@ -137,7 +138,7 @@ int main(int argc, char **argv)
 		if (executable_path == NULL)
 		{
 			fprintf(stderr, "%s: 1: %s: not found\n", argv[0], cmd_argv[0]);
-			status = 127;
+			last_status = 127;
 			continue;
 		}
 
@@ -165,6 +166,7 @@ int main(int argc, char **argv)
 		{
 			if (wait(&status) == -1)
 				perror("wait");
+			last_status = WEXITSTATUS(status);
 			if (executable_path != cmd_argv[0])
 				free(executable_path);
 		}
