@@ -35,10 +35,8 @@ char *find_executable(char *command)
         i++;
     }
 
-    if (path_env == NULL || path_env[0] == '\0') /* Check if PATH is NULL or empty */
-    {
+    if (path_env == NULL || path_env[0] == '\0')
         return (NULL);
-    }
 
     path_copy = strdup(path_env);
     if (path_copy == NULL)
@@ -73,22 +71,25 @@ char *find_executable(char *command)
 
 /**
  * main - Simple shell entry point
- * @void: No parameters
+ * @argc: The number of command-line arguments.
+ * @argv: An array of command-line argument strings.
  *
  * Return: 0 on success.
  */
-int main(void)
+int main(int argc, char **argv)
 {
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
     pid_t pid;
     int status;
-    char *argv[MAX_ARGS];
+    char *cmd_argv[MAX_ARGS];
     extern char **environ;
     char *token = NULL;
-    int i;
     char *executable_path = NULL;
+    int i;
+
+    (void)argc;
 
     while (1)
     {
@@ -115,28 +116,28 @@ int main(void)
         }
         
         i = 0;
-        argv[i] = token;
+        cmd_argv[i] = token;
         i++;
         while ((token = strtok(NULL, " ")) != NULL && i < MAX_ARGS - 1)
         {
-            argv[i] = token;
+            cmd_argv[i] = token;
             i++;
         }
-        argv[i] = NULL;
+        cmd_argv[i] = NULL;
         
-        if (strchr(argv[0], '/') != NULL)
+        if (strchr(cmd_argv[0], '/') != NULL)
         {
-            executable_path = argv[0];
+            executable_path = cmd_argv[0];
         }
         else
         {
-            executable_path = find_executable(argv[0]);
+            executable_path = find_executable(cmd_argv[0]);
         }
 
         if (executable_path == NULL)
         {
-            perror(argv[0]);
-            continue;
+            fprintf(stderr, "%s: 1: %s: not found\n", argv[0], cmd_argv[0]);
+            return (127);
         }
 
         pid = fork();
@@ -144,17 +145,17 @@ int main(void)
         if (pid == -1)
         {
             perror("fork");
-            if (executable_path != argv[0])
+            if (executable_path != cmd_argv[0])
                 free(executable_path);
             continue;
         }
 
         if (pid == 0)
         {
-            if (execve(executable_path, argv, environ) == -1)
+            if (execve(executable_path, cmd_argv, environ) == -1)
             {
                 perror(executable_path);
-                if (executable_path != argv[0])
+                if (executable_path != cmd_argv[0])
                     free(executable_path);
                 _exit(1);
             }
@@ -163,7 +164,7 @@ int main(void)
         {
             if (wait(&status) == -1)
                 perror("wait");
-            if (executable_path != argv[0])
+            if (executable_path != cmd_argv[0])
                 free(executable_path);
         }
     }
@@ -171,4 +172,3 @@ int main(void)
     free(line);
     return (0);
 }
-
