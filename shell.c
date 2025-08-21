@@ -45,21 +45,21 @@ int main(void)
         token = strtok(line, " ");
 
         if (token == NULL)
+        {
             continue;
+        }
         
         i = 0;
         argv[i] = token;
         i++;
-        while (i < MAX_ARGS - 1)
+        while ((token = strtok(NULL, " ")) != NULL && i < MAX_ARGS - 1)
         {
-            token = strtok(NULL, " ");
-            if (token == NULL)
-                break;
             argv[i] = token;
             i++;
         }
         argv[i] = NULL;
         
+        // Fork a child process
         pid = fork();
         
         if (pid == -1)
